@@ -3,7 +3,7 @@ Samuel Darcey - Bastien Rouiller
 # Lab 04 – Docker
 ##Table of contents
 ##Introduction
-In this lab...
+This lab is based on the previous lab on load balancing. In this lab we are deploying a supervisor on the containers and manage a web server cluster with Serf. The load balancer must be able to adapt to change in architecture (web app server being added or removed) by automatically reloading its configuration.
 ##Task 0: Identify issues and install the tools
 ###M1
 We do not think we can use the current solution for a production environment. The main problem is when we want to add or remove server. We need to manually reconfigure the load balancer every time.
@@ -41,68 +41,7 @@ github repo :
 
 #### 1. Provide the docker log output for each of the containers: ha, s1 and s2. You need to create a folder logs in your repository to store the files separately from the lab report. For each lab task create a folder and name it using the task number. No need to create a folder when there are no logs.
 
-```
------------------------HA----------------------------------
-vagrant@ubuntu-14:/vagrant/ha/services/serf$ docker logs ha
-[s6-init] making user provided files available at /var/run/s6/etc...exited 0.
-[s6-init] ensuring user provided files have correct perms...exited 0.
-[fix-attrs.d] applying ownership & permissions fixes...
-[fix-attrs.d] done.
-[cont-init.d] executing container initialization scripts...
-[cont-init.d] done.
-[services.d] starting services
-[services.d] done.
-/opt/bin/serf agent --join ha --replay --event-handler member-join=/serf-handlers/member-join.sh --event-handler member-leave,member-failed=/serf-handlers/member-leave.sh --tag role=balancer
-==> Starting Serf agent...
-==> Starting Serf agent RPC...
-==> Serf agent running!
-         Node name: '1878c0d6c478'
-         Bind addr: '0.0.0.0:7946'
-          RPC addr: '127.0.0.1:7373'
-         Encrypted: false
-          Snapshot: false
-           Profile: lan
-==> Joining cluster...(replay: true)
-[WARNING] 348/101551 (172) : Server nodes/s1 is DOWN, reason: Layer4 connection problem, info: "Connection refused", check duration: 0ms. 1 active and 0 backup servers left. 0 sessions active, 0 requeued, 0 remaining in queue.
-    Join completed. Synced with 1 initial agents
-
-==> Log data will now stream in as it occurs:
-
-    2016/12/14 10:15:51 [INFO] agent: Serf agent starting
-    2016/12/14 10:15:51 [INFO] serf: EventMemberJoin: 1878c0d6c478 172.18.0.2
-    2016/12/14 10:15:51 [INFO] agent: joining: [ha] replay: true
-    2016/12/14 10:15:51 [INFO] agent: joined: 1 nodes
-    2016/12/14 10:15:52 [INFO] agent: Received event: member-join
-[WARNING] 348/101552 (172) : Server nodes/s2 is DOWN, reason: Layer4 connection problem, info: "Connection refused", check duration: 0ms. 0 active and 0 backup servers left. 0 sessions active, 0 requeued, 0 remaining in queue.
-[ALERT] 348/101552 (172) : backend 'nodes' has no server available!
-    2016/12/14 10:15:52 [ERR] agent: Error invoking script '/serf-handlers/member-join.sh': exit status 127
-```
-```
--------------------------------S1----------------------------
-vagrant@ubuntu-14:/vagrant/ha/services/serf$ docker logs s1
-[s6-init] making user provided files available at /var/run/s6/etc...exited 0.
-[s6-init] ensuring user provided files have correct perms...exited 0.
-[fix-attrs.d] applying ownership & permissions fixes...
-[fix-attrs.d] done.
-[cont-init.d] executing container initialization scripts...
-[cont-init.d] done.
-[services.d] starting services
-[services.d] done.
-Application started
-```
-```
----------------------------------S2------------------------------
-vagrant@ubuntu-14:/vagrant/ha/services/serf$ docker logs s2
-[s6-init] making user provided files available at /var/run/s6/etc...exited 0.
-[s6-init] ensuring user provided files have correct perms...exited 0.
-[fix-attrs.d] applying ownership & permissions fixes...
-[fix-attrs.d] done.
-[cont-init.d] executing container initialization scripts...
-[cont-init.d] done.
-[services.d] starting services
-[services.d] done.
-Application started
-```
+/logs/task 2
 
 #### 2. Give the answer to the question about the existing problem with the current solution.
 
@@ -110,6 +49,7 @@ Application started
 
 ## Task 3: React to membership changes
 #### 1. Provide the docker log output for each of the containers: ha, s1 and s2. Put your logs in the logs directory you created in the previous task.
+
 
 #### 2. Provide the logs from the ha container gathered directly from the /var/log/serf.log file present in the container. Put the logs in the logs directory in your repo.
 
@@ -158,3 +98,4 @@ RUN command 1 && command 2 && command 3
 ####3. (Optional:) Present a live demo where you add and remove a backend container.
 
 ## Conclusion
+In this lab we were able to deploy an architecture allowing scalability and. We could imagine to deploy this in production environment. 
