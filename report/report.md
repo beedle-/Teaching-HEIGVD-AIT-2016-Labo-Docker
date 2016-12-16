@@ -1,0 +1,160 @@
+Samuel Darcey - Bastien Rouiller
+
+# Lab 04 – Docker
+##Table of contents
+##Introduction
+In this lab...
+##Task 0: Identify issues and install the tools
+###M1
+We do not think we can use the current solution for a production environment. The main problem is when we want to add or remove server. We need to manually reconfigure the load balancer every time.
+###M2
+We need to add thoses lines
+In the script file ha/scripts/run.sh
+> sed -i 's/<s3>/$S3_PORT_3000_TCP_ADDR/g' /usr/local/etc/haproxy/haproxy.cfg
+
+In the haproxy configuration file (Haproxy.cfg), we add the server in the list of nodes :
+> server s3 172.17.0.4:3000
+Depending on the balance policy we might need to add more information.
+###M3
+We need a way to automatically discover new nodes. We could use multicast to achieve this.
+###M4
+When we use multicast we can send a packet to all nodes in the network. [décrire multicast, protocole] 
+###M5
+
+###M6
+We can use a bash script on the load balancer that changes the configuration based on input parameters (ip and server name of the newly added node).
+
+![haproxy](task0.png)
+github repo :
+> https://github.com/beedle-/Teaching-HEIGVD-AIT-2016-Labo-Docker
+
+
+## Task 1: Add a process supervisor to run several processes
+
+####  1. Take a screenshot of the stats page of HAProxy at http://192.168.42.42:1936. You should see your backend nodes. It should be really similar to the screenshot of the previous task.
+![task 1](task1.png)
+
+#### 2. Describe your difficulties for this task and your understanding of what is happening during this task. Explain in your own words why are we installing a process supervisor. Do not hesitate to do more research and to find more articles on that topic to illustrate the problem.
+
+
+## Task 2: Add a tool to manage membership in the web server cluster
+
+#### 1. Provide the docker log output for each of the containers: ha, s1 and s2. You need to create a folder logs in your repository to store the files separately from the lab report. For each lab task create a folder and name it using the task number. No need to create a folder when there are no logs.
+
+```
+-----------------------HA----------------------------------
+vagrant@ubuntu-14:/vagrant/ha/services/serf$ docker logs ha
+[s6-init] making user provided files available at /var/run/s6/etc...exited 0.
+[s6-init] ensuring user provided files have correct perms...exited 0.
+[fix-attrs.d] applying ownership & permissions fixes...
+[fix-attrs.d] done.
+[cont-init.d] executing container initialization scripts...
+[cont-init.d] done.
+[services.d] starting services
+[services.d] done.
+/opt/bin/serf agent --join ha --replay --event-handler member-join=/serf-handlers/member-join.sh --event-handler member-leave,member-failed=/serf-handlers/member-leave.sh --tag role=balancer
+==> Starting Serf agent...
+==> Starting Serf agent RPC...
+==> Serf agent running!
+         Node name: '1878c0d6c478'
+         Bind addr: '0.0.0.0:7946'
+          RPC addr: '127.0.0.1:7373'
+         Encrypted: false
+          Snapshot: false
+           Profile: lan
+==> Joining cluster...(replay: true)
+[WARNING] 348/101551 (172) : Server nodes/s1 is DOWN, reason: Layer4 connection problem, info: "Connection refused", check duration: 0ms. 1 active and 0 backup servers left. 0 sessions active, 0 requeued, 0 remaining in queue.
+    Join completed. Synced with 1 initial agents
+
+==> Log data will now stream in as it occurs:
+
+    2016/12/14 10:15:51 [INFO] agent: Serf agent starting
+    2016/12/14 10:15:51 [INFO] serf: EventMemberJoin: 1878c0d6c478 172.18.0.2
+    2016/12/14 10:15:51 [INFO] agent: joining: [ha] replay: true
+    2016/12/14 10:15:51 [INFO] agent: joined: 1 nodes
+    2016/12/14 10:15:52 [INFO] agent: Received event: member-join
+[WARNING] 348/101552 (172) : Server nodes/s2 is DOWN, reason: Layer4 connection problem, info: "Connection refused", check duration: 0ms. 0 active and 0 backup servers left. 0 sessions active, 0 requeued, 0 remaining in queue.
+[ALERT] 348/101552 (172) : backend 'nodes' has no server available!
+    2016/12/14 10:15:52 [ERR] agent: Error invoking script '/serf-handlers/member-join.sh': exit status 127
+```
+```
+-------------------------------S1----------------------------
+vagrant@ubuntu-14:/vagrant/ha/services/serf$ docker logs s1
+[s6-init] making user provided files available at /var/run/s6/etc...exited 0.
+[s6-init] ensuring user provided files have correct perms...exited 0.
+[fix-attrs.d] applying ownership & permissions fixes...
+[fix-attrs.d] done.
+[cont-init.d] executing container initialization scripts...
+[cont-init.d] done.
+[services.d] starting services
+[services.d] done.
+Application started
+```
+```
+---------------------------------S2------------------------------
+vagrant@ubuntu-14:/vagrant/ha/services/serf$ docker logs s2
+[s6-init] making user provided files available at /var/run/s6/etc...exited 0.
+[s6-init] ensuring user provided files have correct perms...exited 0.
+[fix-attrs.d] applying ownership & permissions fixes...
+[fix-attrs.d] done.
+[cont-init.d] executing container initialization scripts...
+[cont-init.d] done.
+[services.d] starting services
+[services.d] done.
+Application started
+```
+
+#### 2. Give the answer to the question about the existing problem with the current solution.
+
+#### 3. Give an explanation on how Serf is working. Read the official website to get more details about the GOSSIP protocol used in Serf. Try to find other solutions that can be used to solve similar situations where we need some auto-discovery mechanism.
+
+## Task 3: React to membership changes
+#### 1. Provide the docker log output for each of the containers: ha, s1 and s2. Put your logs in the logs directory you created in the previous task.
+
+#### 2. Provide the logs from the ha container gathered directly from the /var/log/serf.log file present in the container. Put the logs in the logs directory in your repo.
+
+## Task 4: Use a template engine to easily generate configuration files
+#### 1. You probably noticed when we added xz-utils, we have to rebuild the whole image which took some time. What can we do to mitigate that? Take a look at the Docker documentation on image layers. Tell us about the pros and cons to merge as much as possible of the command. In other words, compare:
+```
+RUN command 1
+RUN command 2
+RUN command 3
+```
+vs.
+```
+
+RUN command 1 && command 2 && command 3
+```
+####There are also some articles about techniques to reduce the image size. Try to find them. They are talking about squashing or flattening images.
+
+####2. Propose a different approach to architecture our images to be able to reuse as much as possible what we have done. Your proposition should also try to avoid as much as possible repetitions between your images.
+
+####3. Provide the /tmp/haproxy.cfg file generated in the ha container after each step. Place the output into the logs folder like you already did for the Docker logs in the previous tasks. Three files are expected. 
+####In addition, provide a log file containing the output of the docker ps console and another file (per container) with docker inspect <container>. Four files are expected.
+
+####4. Based on the three output files you have collected, what can you say about the way we generate it? What is the problem if any?
+
+## Task 5: Generate a new load balancer configuration when membership changes
+
+#### 1. Provide the file /usr/local/etc/haproxy/haproxy.cfg generated in the ha container after each step. Three files are expected.
+
+#### In addition, provide a log file containing the output of the docker ps console and another file (per container) with docker inspect <container>. Four files are expected.
+
+#### 2. Provide the list of files from the /nodes folder inside the ha container. One file expected with the command output.
+
+#### 3. Provide the configuration file after you stopped one container and the list of nodes present in the /nodes folder. One file expected with the command output. Two files are expected.
+
+#### In addition, provide a log file containing the output of the docker ps console. One file expected.
+
+#### 4. (Optional:) Propose a different approach to manage the list of backend nodes. You do not need to implement it. You can also propose your own tools or the ones you discovered online. In that case, do not forget to cite your references.
+
+##Task 6: Make the load balancer automatically reload the new configuration
+####1. Take a screenshots of the HAProxy stat page showing more than 2 web applications running. Additional screenshots are welcome to see a sequence of experimentations like shutting down a node and starting more nodes.
+
+#### Also provide the output of docker ps in a log file. At least one file is expected. You can provide one output per step of your experimentation according to your screenshots.
+
+####2. Give your own feelings about the final solution. Propose improvements or ways to do the things differently. If any, provide references to your readings for the improvements.
+
+####3. (Optional:) Present a live demo where you add and remove a backend container.
+
+## Conclusion
