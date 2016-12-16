@@ -46,17 +46,20 @@ We could imagine installing both Apache and OpenSSH on the same container using 
 ## Task 2: Add a tool to manage membership in the web server cluster
 
 #### 1. Provide the docker log output for each of the containers: ha, s1 and s2. You need to create a folder logs in your repository to store the files separately from the lab report. For each lab task create a folder and name it using the task number. No need to create a folder when there are no logs.
-[Task 2 logs](../logs/task2)
+[Task 2 logs](../logs/task2/OutputTask2.txt)
 
 #### 2. Give the answer to the question about the existing problem with the current solution.
 
 #### 3. Give an explanation on how Serf is working. Read the official website to get more details about the GOSSIP protocol used in Serf. Try to find other solutions that can be used to solve similar situations where we need some auto-discovery mechanism.
+Serf manages cluster memberships. It allows to detect new members or departing members. It uses GOSSIP protocol, which is based on SWIM protocol. This protocols consists of sending broadcast to the cluster to detects members. It starts with one nodes and "contaminates" other nodes until convergence.
+ZooKeeper is an alternative to Serf. It is much more complex.
 
 ## Task 3: React to membership changes
 #### 1. Provide the docker log output for each of the containers: ha, s1 and s2. Put your logs in the logs directory you created in the previous task.
-
+[Task 3 logs](../logs/task3)
 
 #### 2. Provide the logs from the ha container gathered directly from the /var/log/serf.log file present in the container. Put the logs in the logs directory in your repo.
+
 
 ## Task 4: Use a template engine to easily generate configuration files
 #### 1. You probably noticed when we added xz-utils, we have to rebuild the whole image which took some time. What can we do to mitigate that? Take a look at the Docker documentation on image layers. Tell us about the pros and cons to merge as much as possible of the command. In other words, compare:
@@ -70,18 +73,34 @@ vs.
 
 RUN command 1 && command 2 && command 3
 ```
+When using multiple lines we have multiple layers. With the second option we have only one layer. The advantage of the first option is that when you change on command docker will only build the layer (the command) that the you changed. The second action is good when multiple action need to be executed one after the other and will always be executed together, for example : 
+> RUN apt-get update && apt-get install.
+
 ####There are also some articles about techniques to reduce the image size. Try to find them. They are talking about squashing or flattening images.
+Docker creates many layers when building an image. For example when there is instruction to add new file in the docker file, if it is temporary files later deleted, docker will keep this layer. Squashing reorganize the logical layer by reducing the number of layers. It allows to reduce the size of the docker image. When flattening images, we put multiple commands (layers) in one same command like shown on the previous question.
+
+> source : https://github.com/goldmann/docker-squash
 
 ####2. Propose a different approach to architecture our images to be able to reuse as much as possible what we have done. Your proposition should also try to avoid as much as possible repetitions between your images.
 
+
 ####3. Provide the /tmp/haproxy.cfg file generated in the ha container after each step. Place the output into the logs folder like you already did for the Docker logs in the previous tasks. Three files are expected. 
+
+[Before s1 and s2 started](../logs/task4/before_s1_s2.cfg)
+[After s1 started](../logs/after_s1.cfg)
+[After s1 and s2 started](../logs/after_s1_s2.cfg)
+
+
 ####In addition, provide a log file containing the output of the docker ps console and another file (per container) with docker inspect <container>. Four files are expected.
+
+
 
 ####4. Based on the three output files you have collected, what can you say about the way we generate it? What is the problem if any?
 
 ## Task 5: Generate a new load balancer configuration when membership changes
 
 #### 1. Provide the file /usr/local/etc/haproxy/haproxy.cfg generated in the ha container after each step. Three files are expected.
+
 
 #### In addition, provide a log file containing the output of the docker ps console and another file (per container) with docker inspect <container>. Four files are expected.
 
