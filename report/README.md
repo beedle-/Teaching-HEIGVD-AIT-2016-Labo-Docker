@@ -66,7 +66,8 @@ Docker log output for each containers :
 [s2](../logs/task2/s2.txt)
 
 #### 2. Give the answer to the question about the existing problem with the current solution.
-With serf, we now know when a new node join or exit the cluster.
+With serf, we now know when a new node join or exit the cluster. And with s6 we manage faster and more efficiently the process running on the nodes.
+
 #### 3. Give an explanation on how Serf is working. Read the official website to get more details about the GOSSIP protocol used in Serf. Try to find other solutions that can be used to solve similar situations where we need some auto-discovery mechanism.
 Serf manages cluster memberships. It allows to detect new members or departing members. It uses GOSSIP protocol, which is based on SWIM protocol. This protocols consists of sending broadcast to the cluster to detects members. It starts with one nodes and "contaminates" other nodes until convergence.
 ZooKeeper is an alternative to Serf. It is much more complex.
