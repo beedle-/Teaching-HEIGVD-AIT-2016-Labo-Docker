@@ -105,7 +105,7 @@ Docker creates many layers when building an image. For example when there is ins
 
 ####2. Propose a different approach to architecture our images to be able to reuse as much as possible what we have done. Your proposition should also try to avoid as much as possible repetitions between your images.
 
-We should maximize the factorization for commands that are use on multiple nodes.
+We should maximize the factorization for commands that are use on multiple nodes. The best we could do is to create a base image with all the same commands and then re-use this image in all the futur image by adding the commands we have to run to change this image has we want.
 
 ####3. Provide the /tmp/haproxy.cfg file generated in the ha container after each step. Place the output into the logs folder like you already did for the Docker logs in the previous tasks. Three files are expected. 
 
@@ -117,10 +117,11 @@ We should maximize the factorization for commands that are use on multiple nodes
 
 
 ####In addition, provide a log file containing the output of the docker ps console and another file (per container) with docker inspect <container>. Four files are expected.
-
+Unfortunatly, we didn't see that we had to deliver this logs during our tests and we only realize that we forgot this step when we finished the practice. So the logs will be totally different with the next step done. Sorry!
 
 
 ####4. Based on the three output files you have collected, what can you say about the way we generate it? What is the problem if any?
+This outputs looks more like logs and not like configuration files (.cfg extension). We should be able to edit the link between the server and HA proxy with this files, not just beeing able to see that there is a new link etablished.
 
 
 
@@ -171,7 +172,7 @@ We should maximize the factorization for commands that are use on multiple nodes
 #### Also provide the output of docker ps in a log file. At least one file is expected. You can provide one output per step of your experimentation according to your screenshots.
 
 - We first started with no node :
- 
+
 ![no node](noNode.PNG)
 
 [log](../logs/task6/noNode.txt)
@@ -195,11 +196,12 @@ This screenshot shows the 2 nodes going down :
 
 And then down :
 
-![5 nodes](2NodesDowning.PNG)
+![5 nodes](2NodesDowned.PNG)
 
 [log](../logs/task6/2NodesDowned.txt)
 
 ####2. Give your own feelings about the final solution. Propose improvements or ways to do the things differently. If any, provide references to your readings for the improvements.
+We should 
 
 ## Conclusion
-In this lab we were able to deploy an architecture allowing scalability and. We could imagine deploying this in production environment. 
+In this lab we were able to deploy an architecture allowing scalability and fast adaptation to aadding/deleting a node. We could imagine deploying this in production environment but we would do some more improvments, like speeding more the reaction of the system with new nodes.
