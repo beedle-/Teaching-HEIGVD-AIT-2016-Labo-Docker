@@ -33,26 +33,3 @@ vagrant@ubuntu-14:/vagrant/ha/services/serf$ docker logs ha
 [ALERT] 348/101552 (172) : backend 'nodes' has no server available!
     2016/12/14 10:15:52 [ERR] agent: Error invoking script '/serf-handlers/member-join.sh': exit status 127
 
--------------------------------S1----------------------------
-vagrant@ubuntu-14:/vagrant/ha/services/serf$ docker logs s1
-[s6-init] making user provided files available at /var/run/s6/etc...exited 0.
-[s6-init] ensuring user provided files have correct perms...exited 0.
-[fix-attrs.d] applying ownership & permissions fixes...
-[fix-attrs.d] done.
-[cont-init.d] executing container initialization scripts...
-[cont-init.d] done.
-[services.d] starting services
-[services.d] done.
-Application started
-
----------------------------------S2------------------------------
-vagrant@ubuntu-14:/vagrant/ha/services/serf$ docker logs s2
-[s6-init] making user provided files available at /var/run/s6/etc...exited 0.
-[s6-init] ensuring user provided files have correct perms...exited 0.
-[fix-attrs.d] applying ownership & permissions fixes...
-[fix-attrs.d] done.
-[cont-init.d] executing container initialization scripts...
-[cont-init.d] done.
-[services.d] starting services
-[services.d] done.
-Application started

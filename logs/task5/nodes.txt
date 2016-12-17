@@ -1,0 +1,5 @@
+--------------------------------------------------- List of registred nodes ---------------------------------------------
+root@129ef5850b59:/nodes# ls -l
+total 8
+-rw-r--r-- 1 root root 24 Dec 16 09:58 6e0e3abc9c94
+-rw-r--r-- 1 root root 24 Dec 16 09:56 ba951c082555
