@@ -66,7 +66,7 @@ Docker log output for each containers :
 [s2](../logs/task2/s2.txt)
 
 #### 2. Give the answer to the question about the existing problem with the current solution.
-With serf, we now know when a new node join or exit the cluster. And with s6 we manage faster and more efficiently the process running on the nodes.
+The problem is that the new container need to register to the cluster through ha container. Ideally registration should be decentralized and new node should be able to register through any node.
 
 #### 3. Give an explanation on how Serf is working. Read the official website to get more details about the GOSSIP protocol used in Serf. Try to find other solutions that can be used to solve similar situations where we need some auto-discovery mechanism.
 Serf manages cluster memberships. It allows to detect new members or departing members. It uses GOSSIP protocol, which is based on SWIM protocol. This protocols consists of sending broadcast to the cluster to detects members. It starts with one nodes and "contaminates" other nodes until convergence.
@@ -76,9 +76,9 @@ ZooKeeper is an alternative to Serf. It is much more complex.
 #### 1. Provide the docker log output for each of the containers: ha, s1 and s2. Put your logs in the logs directory you created in the previous task.
 Docker logs for each noes :
 
-[ha](../logs/task3/Docker_Logs_ha.txt)
-[s1](../logs/task3/Docker_Logs_s1.txt)
-[s2](../logs/task3/Docker_Logs_s2.txt)
+- [ha](../logs/task3/Docker_Logs_ha.txt)
+- [s1](../logs/task3/Docker_Logs_s1.txt)
+- [s2](../logs/task3/Docker_Logs_s2.txt)
 
 #### 2. Provide the logs from the ha container gathered directly from the /var/log/serf.log file present in the container. Put the logs in the logs directory in your repo.
 [log serf](../logs/task3/serf_ha.txt)
@@ -105,14 +105,15 @@ Docker creates many layers when building an image. For example when there is ins
 
 ####2. Propose a different approach to architecture our images to be able to reuse as much as possible what we have done. Your proposition should also try to avoid as much as possible repetitions between your images.
 
+We should maximize the factorization for commands that are use on multiple nodes.
 
 ####3. Provide the /tmp/haproxy.cfg file generated in the ha container after each step. Place the output into the logs folder like you already did for the Docker logs in the previous tasks. Three files are expected. 
 
-[Before s1 and s2 started](../logs/task4/before_s1_s2.txt)
+- [Before s1 and s2 started](../logs/task4/before_s1_s2.txt)
 
-[After s1 started](../logs/task4/after_s1.txt)
+- [After s1 started](../logs/task4/after_s1.txt)
 
-[After s1 and s2 started](../logs/task4/after_s1_s2.txt)
+- [After s1 and s2 started](../logs/task4/after_s1_s2.txt)
 
 
 ####In addition, provide a log file containing the output of the docker ps console and another file (per container) with docker inspect <container>. Four files are expected.
@@ -121,41 +122,43 @@ Docker creates many layers when building an image. For example when there is ins
 
 ####4. Based on the three output files you have collected, what can you say about the way we generate it? What is the problem if any?
 
+
+
 ## Task 5: Generate a new load balancer configuration when membership changes
 
 ### Logs obtained after the tests
 
-[ha logs](../logs/task5/logs_ha.txt)
+- [ha logs](logs/task5/logs_ha.txt)
 
-[s1 logs](../logs/task5/s1.txt)
+- [s1 logs](../logs/task5/s1.txt)
 
-[s2 logs](../logs/task5/s2.txt)
+- [s2 logs](../logs/task5/s2.txt)
 
 
 #### 1. Provide the file /usr/local/etc/haproxy/haproxy.cfg generated in the ha container after each step. Three files are expected.
 
-[Before s1 and s2 started](../logs/task5/before_s1_s2.txt)
+- [Before s1 and s2 started](../logs/task5/before_s1_s2.txt)
 
-[After s1 started](../logs/task5/after_s1.txt)
+- [After s1 started](../logs/task5/after_s1.txt)
 
-[After s1 and s2 started](../logs/task5/after_s1_s2.txt)
+- [After s1 and s2 started](../logs/task5/after_s1_s2.txt)
 
 
 #### In addition, provide a log file containing the output of the docker ps console and another file (per container) with docker inspect <container>. Four files are expected.
-[docker ps](../logs/task5/docker_ps.txt)
+- [docker ps](../logs/task5/docker_ps.txt)
 
-[docker inspect ha](../logs/task5/docker_inspect_ha.txt)
+- [docker inspect ha](../logs/task5/docker_inspect_ha.txt)
 
-[docker inspect s1](../logs/task5/docker_inspect_s1.txt)
+- [docker inspect s1](../logs/task5/docker_inspect_s1.txt)
 
-[docker inspect s2](../logs/task5/docker_inspect_s2.txt)
+- [docker inspect s2](../logs/task5/docker_inspect_s2.txt)
 #### 2. Provide the list of files from the /nodes folder inside the ha container. One file expected with the command output.
 [List of nodes](../logs/task5/nodes.txt)
 
 #### 3. Provide the configuration file after you stopped one container and the list of nodes present in the /nodes folder. One file expected with the command output. Two files are expected.
-[ha config](../logs/task5/ha_without_s1.txt)
+- [ha config](../logs/task5/ha_without_s1.txt)
 
-[list of nodes](../logs/task5/node_without_s1.txt)
+- [list of nodes](../logs/task5/node_without_s1.txt)
 
 #### In addition, provide a log file containing the output of the docker ps console. One file expected.
 
@@ -196,6 +199,7 @@ And then down :
 [log](../logs/task6/2NodesDowned.txt)
 
 ####2. Give your own feelings about the final solution. Propose improvements or ways to do the things differently. If any, provide references to your readings for the improvements.
+
 
 ####3. (Optional:) Present a live demo where you add and remove a backend container.
 
