@@ -61,9 +61,9 @@ We could imagine installing both Apache and OpenSSH on the same container using 
 
 #### 1. Provide the docker log output for each of the containers: ha, s1 and s2. You need to create a folder logs in your repository to store the files separately from the lab report. For each lab task create a folder and name it using the task number. No need to create a folder when there are no logs.
 Docker log output for each containers :
-[ha](../logs/task2/ha.txt)
-[s1](../logs/task2/s1.txt)
-[s2](../logs/task2/s2.txt)
+- [ha](../logs/task2/ha.txt)
+- [s1](../logs/task2/s1.txt)
+- [s2](../logs/task2/s2.txt)
 
 #### 2. Give the answer to the question about the existing problem with the current solution.
 The problem is that the new container need to register to the cluster through ha container. Ideally registration should be decentralized and new node should be able to register through any node.
@@ -152,6 +152,7 @@ We should maximize the factorization for commands that are use on multiple nodes
 - [docker inspect s1](../logs/task5/docker_inspect_s1.txt)
 
 - [docker inspect s2](../logs/task5/docker_inspect_s2.txt)
+
 #### 2. Provide the list of files from the /nodes folder inside the ha container. One file expected with the command output.
 [List of nodes](../logs/task5/nodes.txt)
 
@@ -199,9 +200,6 @@ And then down :
 [log](../logs/task6/2NodesDowned.txt)
 
 ####2. Give your own feelings about the final solution. Propose improvements or ways to do the things differently. If any, provide references to your readings for the improvements.
-
-
-####3. (Optional:) Present a live demo where you add and remove a backend container.
 
 ## Conclusion
 In this lab we were able to deploy an architecture allowing scalability and. We could imagine deploying this in production environment. 
