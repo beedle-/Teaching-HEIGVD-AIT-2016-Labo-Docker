@@ -117,11 +117,11 @@ We should maximize the factorization for commands that are use on multiple nodes
 
 
 ####In addition, provide a log file containing the output of the docker ps console and another file (per container) with docker inspect <container>. Four files are expected.
-Unfortunatly, we didn't see that we had to deliver this logs during our tests and we only realize that we forgot this step when we finished the practice. So the logs will be totally different with the next step done. Sorry!
+Unfortunately, we didn't see that we had to deliver this logs during our tests and we only realize that we forgot this step when we finished the practice. So the logs will be totally different with the next step done. Sorry!
 
 
 ####4. Based on the three output files you have collected, what can you say about the way we generate it? What is the problem if any?
-This outputs looks more like logs and not like configuration files (.cfg extension). We should be able to edit the link between the server and HA proxy with this files, not just beeing able to see that there is a new link etablished.
+This outputs looks more like logs and not like configuration files (.cfg extension). We should be able to edit the link between the server and HA proxy with this files, not just being able to see that there is a new link established.
 
 
 
@@ -202,7 +202,7 @@ And then down :
 
 ####2. Give your own feelings about the final solution. Propose improvements or ways to do the things differently. If any, provide references to your readings for the improvements.
 One probleme is that we can now only see the container's id and not the name we gave to the server (s1, s2, ...). If we have to debug the servers, we should first check with `docker ps` the corresponding name with the container's id. Probably we could use the .cfg file in the HA proxy to print and change the container's id to a name.
-Finally, we would think that this solution is nearly exploitable in a production environnement in a medium size context. We should improve the speed of the discovery if we wanted to be in a high availibility context (Like improving the docker's image to be more easy to build and run for the machine).
+Finally, we would think that this solution is nearly exploitable in a production environnement in a medium size context. We should improve the speed of the discovery if we wanted to be in a high availability context (Like improving the docker's image to be more easy to build and run for the machine).
 
 ## Conclusion
-In this lab we were able to deploy an architecture allowing scalability and fast adaptation to aadding/deleting a node. We could imagine deploying this in production environment but we would do some more improvments, like speeding more the reaction of the system with new nodes.
+In this lab we were able to deploy an architecture allowing scalability and fast adaptation to adding/deleting a node. We could imagine deploying this in production environment but we would do some more improvements, like speeding more the reaction of the system with new nodes.
