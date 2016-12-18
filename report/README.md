@@ -201,7 +201,8 @@ And then down :
 [log](../logs/task6/2NodesDowned.txt)
 
 ####2. Give your own feelings about the final solution. Propose improvements or ways to do the things differently. If any, provide references to your readings for the improvements.
-We should 
+One probleme is that we can now only see the container's id and not the name we gave to the server (s1, s2, ...). If we have to debug the servers, we should first check with `docker ps` the corresponding name with the container's id. Probably we could use the .cfg file in the HA proxy to print and change the container's id to a name.
+Finally, we would think that this solution is nearly exploitable in a production environnement in a medium size context. We should improve the speed of the discovery if we wanted to be in a high availibility context (Like improving the docker's image to be more easy to build and run for the machine).
 
 ## Conclusion
 In this lab we were able to deploy an architecture allowing scalability and fast adaptation to aadding/deleting a node. We could imagine deploying this in production environment but we would do some more improvments, like speeding more the reaction of the system with new nodes.
